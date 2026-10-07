@@ -1,0 +1,191 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+/*FONTS*/
+:root{--coral:#F4917B;--lila:#9B7FD4;--tinta:#3D2B6E;--tinta-media:#6C5F91;--indigo:#533FB7;--crema:#FAF6EF;--amarillo-logo:#FFE39A;--amarillo:#F5DE7E;}
+html,body{margin:0;padding:0;background:transparent;}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;}
+.abs{position:absolute;will-change:transform,opacity;}
+.pop{font-family:Poppins;}
+.serif{font-family:'Playfair Display';font-style:italic;font-weight:700;}
+.shadow-video{text-shadow:0 4px 18px rgba(0,0,0,.55),0 2px 4px rgba(0,0,0,.45);}
+.shadow-lila{text-shadow:0 6px 26px rgba(43,30,71,.55),0 2px 4px rgba(43,30,71,.35);}
+.glow-crema{text-shadow:0 0 22px rgba(250,246,239,.85),0 0 6px rgba(250,246,239,.7);}
+/* hook */
+#hook{left:84px;top:262px;}
+#hook .l1{font-weight:800;font-size:78px;line-height:1;letter-spacing:-.02em;color:#fff;}
+#hook .l2{font-size:96px;line-height:1.02;color:var(--amarillo-logo);margin-top:4px;}
+/* immersive background (back layer) */
+#bg{left:0;top:0;width:1080px;height:1920px;background:linear-gradient(180deg,#2B1E47 0%,#241838 55%,#1A1230 100%);overflow:hidden;}
+#bg .glow{position:absolute;border-radius:50%;filter:blur(90px);}
+#bg .g1{width:900px;height:700px;left:90px;top:-160px;background:rgba(155,127,212,.42);}
+#bg .g2{width:800px;height:800px;left:140px;top:1250px;background:rgba(83,63,183,.38);}
+#bg .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(205,185,245,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(205,185,245,.06) 1px,transparent 1px);background-size:72px 72px;-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 30%,transparent 75%);}
+#bg .dot{position:absolute;width:5px;height:5px;border-radius:50%;background:#E9DEFF;}
+/* presenter card border */
+#frame{left:0;top:0;border:3px solid rgba(190,166,240,.95);box-shadow:0 0 0 1px rgba(255,255,255,.08) inset,0 0 46px rgba(155,127,212,.55),0 24px 60px rgba(0,0,0,.45);box-sizing:border-box;}
+/* insights panel */
+#panel{left:160px;top:262px;width:760px;height:440px;box-sizing:border-box;padding:28px 34px;border-radius:30px;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border:2px solid rgba(190,166,240,.55);box-shadow:0 20px 60px rgba(0,0,0,.35),0 0 40px rgba(155,127,212,.18) inset;color:#fff;}
+#panel .hd{display:flex;justify-content:space-between;align-items:center;}
+#panel .hd .ttl{font-weight:600;font-size:27px;color:rgba(255,255,255,.75);}
+#panel .hd .badge{font-weight:700;font-size:19px;letter-spacing:.16em;color:#E3D6FF;background:rgba(155,127,212,.28);border:1.5px solid rgba(190,166,240,.7);border-radius:999px;padding:7px 16px;}
+#panel .ph{position:absolute;left:34px;right:34px;top:96px;}
+#panel .views{display:flex;align-items:baseline;gap:16px;margin-top:8px;}
+#panel .views .num{font-weight:800;font-size:96px;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums;}
+#panel .views .lb{font-weight:600;font-size:30px;color:#CDB9F5;}
+#panel .row{margin-top:30px;}
+#panel .row .top{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:27px;color:rgba(255,255,255,.88);}
+#panel .row .top .v{font-weight:800;font-size:32px;}
+#panel .row .track{margin-top:10px;height:16px;border-radius:999px;background:rgba(255,255,255,.1);overflow:hidden;}
+#panel .row .fill{height:100%;border-radius:999px;transform-origin:0 50%;}
+#panel .r1 .fill{background:linear-gradient(90deg,#9B7FD4,#C3A9FF);box-shadow:0 0 18px rgba(155,127,212,.7);}
+#panel .r1 .v{color:var(--amarillo-logo);}
+#panel .r2 .fill{background:rgba(255,255,255,.5);}
+#panel .r2 .v{color:rgba(255,255,255,.75);}
+#panel .tagp{display:inline-block;margin-left:12px;background:var(--amarillo-logo);color:var(--tinta);font-weight:700;font-size:22px;padding:6px 14px;border-radius:999px;vertical-align:middle;}
+#panel .flow{display:flex;align-items:center;justify-content:space-between;margin-top:22px;}
+#panel .flow .col{display:flex;flex-direction:column;}
+#panel .flow .big{font-weight:800;font-size:84px;line-height:1;letter-spacing:-.03em;}
+#panel .flow .big.serif{font-size:104px;letter-spacing:0;color:var(--amarillo-logo);}
+#panel .flow .sm{font-weight:600;font-size:27px;color:#CDB9F5;margin-top:8px;}
+#panel .flow .arrow{font-weight:800;font-size:64px;color:#C3A9FF;}
+#panel .less{display:inline-block;margin-top:26px;background:var(--coral);color:var(--tinta);font-weight:700;font-size:26px;padding:10px 20px;border-radius:999px;}
+/* "no me falta contenido" */
+#nocont{left:60px;width:960px;top:256px;text-align:center;}
+#nocont .k{font-weight:700;font-size:30px;letter-spacing:.3em;color:#fff;}
+#nocont .w{position:relative;display:inline-block;font-weight:800;font-size:124px;line-height:1.05;letter-spacing:-.02em;color:#fff;margin-top:4px;}
+#nocont .w .strike{position:absolute;left:-12px;right:-12px;top:52%;height:14px;margin-top:-7px;border-radius:8px;background:var(--amarillo-logo);transform-origin:0 50%;box-shadow:0 3px 10px rgba(43,30,71,.35);}
+/* pill */
+#pill{left:84px;top:272px;background:var(--amarillo-logo);color:var(--tinta);font-weight:700;font-size:42px;line-height:1;padding:22px 38px;border-radius:999px;box-shadow:0 10px 26px rgba(0,0,0,.2);transform-origin:30% 50%;}
+#pill .strike{position:absolute;left:24px;top:50%;height:7px;margin-top:-3px;border-radius:4px;background:var(--tinta);transform-origin:0 50%;}
+/* giant (back layer) */
+#giant{left:60px;width:860px;top:244px;text-align:center;}
+#giant .l1{font-weight:800;font-size:108px;line-height:1;letter-spacing:-.02em;color:#fff;}
+#giant .l2{font-size:158px;line-height:1;color:var(--amarillo-logo);margin-top:-18px;}
+/* name */
+#name{left:84px;top:272px;}
+#name .row{display:flex;align-items:baseline;gap:22px;}
+#name .m{font-weight:800;font-size:88px;line-height:1;letter-spacing:-.02em;color:var(--tinta);}
+#name .g{font-size:92px;line-height:1;color:var(--indigo);}
+#name .at{position:relative;display:inline-block;margin-top:10px;font-weight:600;font-size:44px;line-height:1.2;color:var(--tinta);padding:0 10px;}
+#name .at .bar{position:absolute;left:0;bottom:4px;height:58%;width:100%;background:var(--amarillo-logo);border-radius:6px;transform-origin:0 50%;z-index:-1;}
+/* closing */
+#close{left:84px;top:266px;}
+#close .l1{font-weight:800;font-size:76px;line-height:1;letter-spacing:-.02em;color:var(--tinta);}
+#close .l2{font-size:92px;line-height:1.05;color:var(--indigo);}
+#close .at{display:inline-block;margin-top:16px;background:var(--indigo);color:#fff;font-weight:600;font-size:38px;line-height:1;padding:14px 28px;border-radius:999px;box-shadow:0 10px 26px rgba(0,0,0,.2);}
+/* subtitles */
+#sub{left:100px;width:880px;top:1280px;height:90px;text-align:center;}
+#sub span{display:inline-block;font-weight:700;font-size:86px;line-height:90px;color:#fff;transform-origin:50% 60%;}
+#sub span.key{color:var(--amarillo-logo);}
+/* storyboard guides */
+#guides{left:0;top:0;width:1080px;height:1920px;display:none;}
+</style></head>
+<body><div id="stage">
+  <div id="bg" class="abs"><div class="glow g1"></div><div class="glow g2"></div><div class="grid"></div><i class="dot" data-i="0"></i><i class="dot" data-i="1"></i><i class="dot" data-i="2"></i><i class="dot" data-i="3"></i><i class="dot" data-i="4"></i><i class="dot" data-i="5"></i><i class="dot" data-i="6"></i><i class="dot" data-i="7"></i><i class="dot" data-i="8"></i><i class="dot" data-i="9"></i><i class="dot" data-i="10"></i><i class="dot" data-i="11"></i><i class="dot" data-i="12"></i><i class="dot" data-i="13"></i><i class="dot" data-i="14"></i><i class="dot" data-i="15"></i><i class="dot" data-i="16"></i><i class="dot" data-i="17"></i><i class="dot" data-i="18"></i><i class="dot" data-i="19"></i><i class="dot" data-i="20"></i><i class="dot" data-i="21"></i><i class="dot" data-i="22"></i><i class="dot" data-i="23"></i><i class="dot" data-i="24"></i><i class="dot" data-i="25"></i><i class="dot" data-i="26"></i><i class="dot" data-i="27"></i><i class="dot" data-i="28"></i><i class="dot" data-i="29"></i><i class="dot" data-i="30"></i><i class="dot" data-i="31"></i><i class="dot" data-i="32"></i><i class="dot" data-i="33"></i><i class="dot" data-i="34"></i><i class="dot" data-i="35"></i></div>
+  <div id="giant" class="abs pop"><div class="l1 shadow-lila">por qué</div><div class="l2 serif shadow-lila">seguirme</div></div>
+  <div id="frame" class="abs"></div>
+  <div id="hook" class="abs pop"><div class="l1 shadow-lila"></div><div class="l2 serif shadow-lila"></div></div>
+  <div id="panel" class="abs pop">
+    <div class="hd"><span class="ttl">Estadísticas de mi cuenta</span><span class="badge">ESTE MES</span></div>
+    <div class="ph" id="ph1">
+      <div class="views"><span class="num" id="views">0</span><span class="lb">visualizaciones</span></div>
+      <div class="row r1"><div class="top"><span>No seguidores<span class="tagp" id="tagp">no me conocían</span></span><span class="v" id="v1">0 %</span></div><div class="track"><div class="fill" id="f1"></div></div></div>
+      <div class="row r2"><div class="top"><span>Seguidores</span><span class="v" id="v2">0 %</span></div><div class="track"><div class="fill" id="f2"></div></div></div>
+    </div>
+    <div class="ph" id="ph2">
+      <div class="flow"><div class="col"><span class="big">19.965</span><span class="sm">personas me vieron</span></div><span class="arrow">→</span><div class="col" style="align-items:flex-end;text-align:right"><span class="big serif">182</span><span class="sm">visitaron mi perfil</span></div></div>
+      <div style="text-align:center"><span class="less" id="less">menos del 1&nbsp;%</span></div>
+    </div>
+  </div>
+  <div id="nocont" class="abs pop"><div class="k shadow-lila">NO ME FALTA</div><div class="w shadow-lila">contenido<span class="strike"></span></div></div>
+  <div id="name" class="abs pop"><div class="row glow-crema"><span class="m">Male</span><span class="g serif">Gozalo</span></div><div class="at"><span class="bar"></span>@male.gozalo</div></div>
+  <div id="close" class="abs pop"><div class="l1 glow-crema">¿Querés ver</div><div class="l2 serif glow-crema">cómo lo hago?</div><div class="at">@male.gozalo</div></div>
+  <div id="sub" class="abs pop"><span class="shadow-video"></span></div>
+  <svg id="guides" class="abs" viewBox="0 0 1080 1920"><rect x="60" y="250" width="860" height="1230" fill="none" stroke="#ff3b6b" stroke-width="4" stroke-dasharray="18 12"/><rect x="0" y="1250" width="1080" height="150" fill="rgba(255,59,107,.10)"/><text x="70" y="240" fill="#ff3b6b" font-family="Poppins" font-weight="700" font-size="28">zona segura</text></svg>
+</div>
+<script>
+const W = /*WORDS*/[];
+const DATA = {views:28383, nonFollowers:83.3, followers:16.7};
+const CARD = /*CARD*/[];
+const HOOKS = {A:["¿Te ven, pero","no te siguen?"], B:["Mucho alcance,","pocos seguidores"], C:["Alcance ≠","seguidores"]};
+const T = {
+  hookIn:.12, hookOut:2.92,
+  panelIn:3.42, bars:W[15].s, tag:W[26].s, phase2:W[31].s, panelOut:11.98,
+  ncK:W[38].s-.05, ncW:W[43].s-.06, strike:W[44].s, ncOut:15.72,
+  g1:W[52].s-.06, g2:W[56].s-.04, gOut:19.32,
+  nameIn:19.66, nameOut:21.22,
+  c1:21.48, c2:W[69].s-.04, c3:W[72].s-.04,
+  subsHide:[[17.0,19.58],[21.40,99]]
+};
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lin=(t,a,d)=>clamp((t-a)/d);
+const eOut=x=>1-Math.pow(1-x,3);
+const eIn=x=>x*x*x;
+const eBack=x=>{const c1=1.35,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2);};
+const $=s=>document.querySelector(s);
+function show(el,o,tx=0,ty=0,sc=1){el.style.opacity=o;el.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;el.style.display=o<=0.001?'none':'block';}
+function inOut(t,tin,tout,din=.35,dout=.25){const a=eOut(lin(t,tin,din)), b=1-eIn(lin(t,tout,dout)); return {a,b,o:Math.min(a,b)};}
+const ICON=(fill,stroke)=>`<svg viewBox="0 0 46 46"><circle cx="23" cy="13" r="10" fill="${fill}" stroke="${stroke}" stroke-width="3"/><path d="M4 44c0-11 8.5-18 19-18s19 7 19 18z" fill="${fill}" stroke="${stroke}" stroke-width="3" stroke-linejoin="round"/></svg>`;
+function lerpC(c1,c2,u){const p=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));const a=p(c1),b=p(c2);return '#'+a.map((v,i)=>Math.round(v+(b[i]-v)*u).toString(16).padStart(2,'0')).join('');}
+let params={hook:'B', layer:'front', guides:false};
+function setup(p){Object.assign(params,p);const h=HOOKS[params.hook];$('#hook .l1').textContent=h[0];$('#hook .l2').textContent=h[1];$('#guides').style.display=params.guides?'block':'none';}
+function cardAt(t){ return CARD[Math.min(CARD.length-1, Math.max(0, Math.round(t*30)))]; }
+function render(t){
+  const front = params.layer==='front';
+  const C = cardAt(t);
+  // immersive background (back layer, only while the card is active)
+  { const bg=$('#bg'); bg.style.display=(!front && C.u>0)?'block':'none';
+    if(!front && C.u>0){ document.querySelectorAll('#bg .dot').forEach(d=>{ const i=+d.dataset.i; const r=(Math.sin(i*12.9898)*43758.5453)%1; const r2=(Math.sin(i*78.233)*12345.678)%1;
+      const x=Math.abs(r)*1080, y0=Math.abs(r2)*1920, sp=18+Math.abs(r*r2)*40; const y=((y0 - t*sp)%1920+1920)%1920;
+      d.style.left=x+'px'; d.style.top=y+'px'; d.style.opacity=(.15+.5*Math.abs(Math.sin(t*1.3+i)))*C.u; d.style.transform=`scale(${.6+Math.abs(r2)})`; });
+      $('#bg .g1').style.transform=`translate(${Math.sin(t*.6)*40}px,${Math.cos(t*.5)*30}px)`; $('#bg .g2').style.transform=`translate(${Math.cos(t*.4)*50}px,${Math.sin(t*.7)*30}px)`; } }
+  // giant (back layer only)
+  { const g=$('#giant'); if(front){g.style.display='none';} else {
+      const out=1-eIn(lin(t,T.gOut,.28)), a1=eOut(lin(t,T.g1,.42)), a2=eOut(lin(t,T.g2,.42));
+      g.style.display=(a1*out>0)?'block':'none';
+      const l1=g.querySelector('.l1'), l2=g.querySelector('.l2');
+      l1.style.opacity=a1*out; l1.style.transform=`translateY(${(1-a1)*46}px) scale(${1.05-.05*a1})`;
+      l2.style.opacity=a2*out; l2.style.transform=`translateY(${(1-a2)*56}px) scale(${1.06-.06*a2})`;
+  }}
+  const vis = (id,o)=>{$(id).style.display=(front&&o>0.001)?'block':'none';};
+  // card border
+  { const f=$('#frame'); vis('#frame', C.u); f.style.left=C.x+'px'; f.style.top=C.y+'px'; f.style.width=C.w+'px'; f.style.height=C.h+'px'; f.style.borderRadius=C.r+'px'; f.style.opacity=clamp(C.u*1.6); }
+  // hook
+  { const r=inOut(t,T.hookIn,T.hookOut); vis('#hook',r.o); const l1=$('#hook .l1'), l2=$('#hook .l2');
+    const a2=eOut(lin(t,T.hookIn+.16,.35));
+    l1.style.opacity=r.a*r.b; l1.style.transform=`translateY(${(1-r.a)*30}px)`;
+    l2.style.opacity=a2*r.b; l2.style.transform=`translateY(${(1-a2)*30}px)`; }
+  // insights panel
+  { const a=eOut(lin(t,T.panelIn,.45)), b=1-eIn(lin(t,T.panelOut,.25)); const o=Math.min(a,b); vis('#panel',o);
+    const p=$('#panel'); p.style.opacity=o; p.style.transform=`translateY(${(1-a)*60 - (1-b)*30}px) scale(${.96+.04*a})`;
+    const cu=eOut(lin(t,T.panelIn+.15,1.1)); $('#views').textContent=Math.round(DATA.views*cu).toLocaleString('es-AR');
+    const bf=eOut(lin(t,T.bars,.9)); $('#f1').style.transform=`scaleX(${bf*DATA.nonFollowers/100})`; $('#f2').style.transform=`scaleX(${bf*DATA.followers/100})`;
+    const fmt=v=>v.toFixed(1).replace('.',',')+' %'; $('#v1').textContent=fmt(bf*DATA.nonFollowers); $('#v2').textContent=fmt(bf*DATA.followers);
+    const tg=eBack(clamp((t-T.tag)/.3)); const tp=$('#tagp'); tp.style.opacity=clamp((t-T.tag)/.12); tp.style.transform=`scale(${.7+.3*tg})`;
+    const p2=eOut(lin(t,T.phase2,.45)); const ph1=$('#ph1'), ph2=$('#ph2');
+    ph1.style.opacity=1-p2; ph1.style.transform=`translateY(${-p2*24}px)`; ph2.style.opacity=p2; ph2.style.transform=`translateY(${(1-p2)*24}px)`;
+    const ls=eBack(clamp((t-T.phase2-.55)/.3)); const le=$('#less'); le.style.opacity=clamp((t-T.phase2-.55)/.12); le.style.transform=`scale(${.7+.3*ls})`; }
+  // "no me falta contenido"
+  { const ak=eOut(lin(t,T.ncK,.35)), aw=eBack(clamp((t-T.ncW)/.32)), b=1-eIn(lin(t,T.ncOut,.25)); vis('#nocont', ak*b);
+    const k=$('#nocont .k'), w=$('#nocont .w'); $('#nocont').style.opacity=b;
+    k.style.opacity=ak; k.style.transform=`translateY(${(1-ak)*20}px)`;
+    w.style.opacity=clamp((t-T.ncW)/.15); w.style.transform=`scale(${.85+.15*aw})`;
+    const st=eOut(lin(t,T.strike,.28)); w.querySelector('.strike').style.transform=`rotate(-4deg) scaleX(${st})`; }
+  // name
+  { const r=inOut(t,T.nameIn,T.nameOut); vis('#name',r.o); const n=$('#name'); n.style.opacity=r.o; n.style.transform=`translateX(${(1-r.a)*-34}px)`;
+    const bar=eOut(lin(t,T.nameIn+.22,.35)); n.querySelector('.bar').style.transform=`scaleX(${bar})`; }
+  // closing
+  { const a1=eOut(lin(t,T.c1,.38)), a2=eOut(lin(t,T.c2,.38)), a3=eBack(clamp((t-T.c3)/.32)); vis('#close',a1);
+    const c=$('#close'); c.style.opacity=1; const l1=c.querySelector('.l1'), l2=c.querySelector('.l2'), at=c.querySelector('.at');
+    l1.style.opacity=a1; l1.style.transform=`translateY(${(1-a1)*28}px)`;
+    l2.style.opacity=a2; l2.style.transform=`translateY(${(1-a2)*28}px)`;
+    at.style.opacity=clamp((t-T.c3)/.15); at.style.transform=`scale(${.8+.2*a3})`; }
+  // subtitles
+  { const hidden=T.subsHide.some(([a,b])=>t>=a&&t<b); let cur=null;
+    if(!hidden){ for(let i=0;i<W.length;i++){ const nx=i+1<W.length?W[i+1].s:W[i].e+.3; const end=Math.max(Math.min(nx, W[i].e+.35), W[i].e); if(t>=W[i].s && t<end){cur=W[i];cur.i=i;break;} } }
+    const s=$('#sub span'); vis('#sub',cur?1:0);
+    if(cur){ s.textContent=cur.w; s.className='shadow-video'+(cur.key?' key':''); const a=eOut(lin(t,cur.s,.09)); s.style.transform=`scale(${.9+.1*a})`; s.style.opacity=.4+.6*a; } }
+}
+window.setup=setup; window.render=render;
+</script></body></html>
