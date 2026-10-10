@@ -81,3 +81,4 @@ Otros límites que conviene saber:
 | Fecha | Reel | Carpeta |
 |---|---|---|
 | Octubre 2026 | Mucho alcance, pocos seguidores | [`2026-10-mucho-alcance-pocos-seguidores`](2026-10-mucho-alcance-pocos-seguidores) |
+| Octubre 2026 | ¿Quién lo editó mejor? (ChatGPT vs. Claude Code, hecho con HyperFrames; la música se suma en Edits) | [`2026-10-quien-lo-edito-mejor`](2026-10-quien-lo-edito-mejor) |
