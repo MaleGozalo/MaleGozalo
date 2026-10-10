@@ -31,15 +31,23 @@ def riser(dur=1.1, peak=-20):
     tone = np.sin(2 * np.pi * np.cumsum(220 + 660 * (t / dur) ** 2) / SR) * .35
     y = (y / np.abs(y).max() + tone) * (t / dur) ** 2.2
     return y / np.abs(y).max() * db(peak)
+def impact(peak=-10):
+    n = int(.9 * SR); t = np.arange(n) / SR
+    boom = np.sin(2 * np.pi * np.cumsum(38 + 90 * np.exp(-t / .06)) / SR) * np.exp(-t / .28)
+    nz = rng.standard_normal(n); hit = np.convolve(nz, np.ones(24) / 24, mode="same") * np.exp(-t / .05) * .6
+    sh = sum(np.sin(2 * np.pi * f * t) for f in (2093, 2637, 3136)) * np.exp(-t / .35) * .12
+    x = boom + hit + sh
+    return x / np.abs(x).max() * db(peak)
 mix = np.zeros((int(TOTAL * SR) + 2 * SR, 2), np.float32)
 def put(x, t, g=1.0):
     i = int(t * SR); x = stereo(x) * g; mix[i:i + len(x)] += x[:len(mix) - i]
 # voice rounds, already normalized to -14 LUFS by mix.py
 put(np.fromfile(f"{C}/r1.f32", np.float32).reshape(-1, 2), V1[0])
 put(np.fromfile(f"{C}/r2.f32", np.float32).reshape(-1, 2), V2[0])
-sfx = [(whoosh(.7, -19), 0.0), (pop(-15), .92), (pop(-15, 1300, 360), 1.07), (whoosh(.45, -20), 2.18), (ding(-19), 2.40),
-       (whoosh(.55, -17), 14.85), (ding(-19, 1568), 15.08), (riser(0.6, -20), 29.1), (whoosh(.5, -18), 29.55),
-       (pop(-13), 29.95), (pop(-13, 1300, 360), 30.10), (pop(-15, 900, 260), 30.75), (ding(-21, 1760), 31.1)]
+sfx = [(whoosh(.8, -12), 0.0), (impact(-9), 0.42), (whoosh(.55, -13), 0.55), (whoosh(.55, -14), 0.72),
+       (pop(-8), .92), (pop(-8, 1300, 360), 1.07), (whoosh(.45, -13), 2.15), (ding(-10), 2.40),
+       (whoosh(.7, -9), 14.80), (ding(-10, 1568), 15.08), (riser(0.6, -13), 29.1), (whoosh(.55, -11), 29.55),
+       (pop(-7), 29.95), (pop(-7, 1300, 360), 30.10), (pop(-9, 900, 260), 30.75), (ding(-12, 1760), 31.1)]
 for x, t in sfx: put(x, t)
 if MUSIC:
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", MUSIC, "-ac", "2", "-ar", str(SR), "-af", "loudnorm=I=-14:TP=-1.5", "-f", "f32le", "-"], capture_output=True, check=True).stdout
