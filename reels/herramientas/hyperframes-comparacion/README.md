@@ -20,9 +20,11 @@ La composición del reel "¿Quién lo editó mejor?" (octubre 2026): dos edicion
 4. Ajustá en `index.html` los tiempos de cada ronda (`data-start`, `data-duration`, `data-media-start`) y los cuadros fijos de `assets/stills/`.
 5. Corré `python voces.py <carpeta de trabajo>` y después `python mezcla.py <carpeta de trabajo> [música]`.
 6. Revisá con `hyperframes lint .` y renderizá con `hyperframes render -o salida.mp4`.
+7. Al exportar la versión final, pasá el audio por un limitador (`alimiter=limit=0.70` con sobremuestreo) para que no sature después de comprimir a AAC.
 
 ## Trampas
 
 - **Cada video y audio con tiempo necesita un `id`.** Sin eso, el video sale congelado y el audio, mudo.
 - **El centrado con `translateX(-50%)` de CSS** se pisa cuando GSAP anima el elemento. Hay que usar `gsap.set(..., { xPercent: -50 })`.
+- **Efectos de sonido:** tienen que quedar unos 3 a 6 dB por debajo del pico de la voz. Más bajo que eso no se escuchan en el celular.
 - **Logos:** el de OpenAI sale de `@lobehub/icons-static-svg` y el de Claude, de `simple-icons` o del mismo paquete de lobehub. Los dos se instalan desde npm.
