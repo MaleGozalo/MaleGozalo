@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: Poppins; font-weight: 600; src: url(assets/fonts/Poppins-SemiBold.ttf) format("truetype"); }
+      @font-face { font-family: Poppins; font-weight: 700; src: url(assets/fonts/Poppins-Bold.ttf) format("truetype"); }
+      @font-face { font-family: Poppins; font-weight: 800; src: url(assets/fonts/Poppins-ExtraBold.ttf) format("truetype"); }
+      @font-face { font-family: "Playfair Display"; font-weight: 700; font-style: italic; src: url(assets/fonts/PlayfairDisplay-BoldItalic.ttf) format("truetype"); }
+      :root {
+        --lila: #9b7fd4; --lila-claro: #cdb9f5; --tinta: #3d2b6e; --indigo: #533fb7; --crema: #faf6ef;
+        --amarillo-logo: #ffe39a; --fondo: #2b1e47; --sticker: #d5c9ec;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--fondo); }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: Poppins, sans-serif; }
+
+      /* background: MG Studio dark lila with soft light */
+      #bg { position: absolute; inset: 0; background: linear-gradient(180deg, #2b1e47 0%, #241838 55%, #1a1230 100%); }
+      #bg .glow { position: absolute; border-radius: 50%; filter: blur(110px); }
+      #bg .g1 { width: 900px; height: 640px; left: 90px; top: -140px; background: rgba(155, 127, 212, 0.45); }
+      #bg .g2 { width: 860px; height: 760px; left: 110px; top: 1180px; background: rgba(83, 63, 183, 0.4); }
+      #bg .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(205,185,245,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(205,185,245,.06) 1px, transparent 1px); background-size: 72px 72px; -webkit-mask-image: radial-gradient(ellipse at 50% 42%, #000 30%, transparent 75%); }
+      #bg .dot { position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #e9deff; }
+
+      /* headline */
+      #head { position: absolute; left: 0; width: 1080px; top: 252px; text-align: center; color: #fff; }
+      #kicker { font-weight: 700; font-size: 24px; letter-spacing: .3em; color: var(--lila-claro); }
+      #t1 { font-weight: 800; font-size: 78px; line-height: 1; letter-spacing: -.01em; margin-top: 16px; text-shadow: 0 6px 26px rgba(26,18,48,.55); }
+      #t2 { font-family: "Playfair Display"; font-style: italic; font-weight: 700; font-size: 112px; line-height: 1.02; color: var(--amarillo-logo); text-shadow: 0 6px 26px rgba(26,18,48,.55); }
+
+      /* round chips */
+      .chip { position: absolute; top: 520px; left: 50%; white-space: nowrap; font-weight: 700; font-size: 22px; letter-spacing: .18em; color: #e3d6ff; background: rgba(155,127,212,.24); border: 1.5px solid rgba(205,185,245,.7); border-radius: 999px; padding: 9px 20px; }
+
+      /* labels (MG Studio sticker style) */
+      .label { position: absolute; top: 582px; height: 58px; display: flex; align-items: center; gap: 12px; padding: 0 22px 0 14px; background: var(--crema); color: var(--tinta); border: 2.5px solid var(--tinta); border-radius: 999px; box-shadow: 0 4px 0 var(--sticker); font-weight: 800; font-size: 26px; letter-spacing: .05em; white-space: nowrap; }
+      .label .logo { width: 36px; height: 36px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; }
+      .label .logo img { width: 26px; height: 26px; }
+      #labL { left: 300px; }
+      #labR { left: 770px; }
+
+      /* video cards */
+      .card { position: absolute; top: 662px; width: 440px; height: 782px; border-radius: 30px; overflow: hidden; background: #120c22; }
+      #cardL { left: 80px; } #cardR { left: 560px; }
+      .card > video, .card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+      .card .dim { position: absolute; inset: 0; background: #1a1230; opacity: 0; }
+      .frame { position: absolute; top: 662px; width: 440px; height: 782px; border-radius: 30px; border: 3px solid rgba(205,185,245,.35); pointer-events: none; }
+      #frameL { left: 80px; } #frameR { left: 560px; }
+      .glowring { position: absolute; inset: -3px; border-radius: 30px; border: 3px solid #cdb9f5; box-shadow: 0 0 46px rgba(155,127,212,.75), 0 0 0 1px rgba(255,255,255,.12) inset; opacity: 0; }
+      .badge { position: absolute; top: 16px; right: 16px; display: flex; align-items: center; gap: 8px; background: rgba(26,18,48,.78); color: #fff; border: 1.5px solid rgba(205,185,245,.75); border-radius: 999px; padding: 7px 14px 7px 10px; font-weight: 700; font-size: 18px; letter-spacing: .14em; opacity: 0; }
+      .badge svg { width: 22px; height: 22px; }
+      .num { position: absolute; top: 50%; left: 50%; width: 150px; height: 150px; margin: -75px 0 0 -75px; border-radius: 50%; background: var(--lila); border: 5px solid #fff; color: #fff; font-weight: 800; font-size: 92px; line-height: 140px; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,.4); opacity: 0; }
+
+      /* closing */
+      #cta { position: absolute; top: 1262px; left: 50%; white-space: nowrap; background: var(--crema); color: var(--tinta); border: 2.5px solid var(--tinta); box-shadow: 0 5px 0 var(--sticker); border-radius: 999px; padding: 16px 34px; font-weight: 800; font-size: 40px; opacity: 0; }
+      #cta em { font-family: "Playfair Display"; font-style: italic; font-weight: 700; color: var(--indigo); font-size: 46px; }
+      #at { position: absolute; top: 1372px; left: 50%; background: var(--indigo); color: #fff; font-weight: 600; font-size: 34px; padding: 12px 26px; border-radius: 999px; box-shadow: 0 10px 26px rgba(0,0,0,.3); opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="33.15" data-width="1080" data-height="1920">
+      <div id="bg"><div class="glow g1"></div><div class="glow g2"></div><div class="grid"></div></div>
+
+      <div id="head">
+        <div id="kicker">MISMO VIDEO · DOS EDICIONES CON IA</div>
+        <div id="t1">¿QUIÉN LO EDITÓ</div>
+        <div id="t2">mejor?</div>
+      </div>
+      <div class="chip" id="chip1">RONDA 1 · EL GANCHO</div>
+      <div class="chip" id="chip2">RONDA 2 · LA EXPLICACIÓN</div>
+
+      <div class="label" id="labL"><span class="logo"><img src="assets/logos/openai.svg" alt="" /></span>CHATGPT</div>
+      <div class="label" id="labR"><span class="logo"><img src="assets/logos/claude-color.svg" alt="" /></span>CLAUDE CODE</div>
+
+      <!-- ChatGPT edit -->
+      <div class="card" id="cardL">
+        <img id="gpt-start" class="clip" src="assets/stills/gpt_start.jpg" data-start="0" data-duration="2.6" alt="" />
+        <video id="gpt-r1" class="clip" src="media/gpt.mp4" muted playsinline data-start="2.6" data-duration="12.55" data-media-start="0"></video>
+        <video id="gpt-r2" class="clip" src="media/gpt.mp4" muted playsinline data-start="15.15" data-duration="14.5" data-media-start="18.15"></video>
+        <img id="gpt-end" class="clip" src="assets/stills/gpt_end.jpg" data-start="29.65" data-duration="3.5" alt="" />
+        <div class="dim" id="dimL"></div>
+      </div>
+      <!-- Claude edit -->
+      <div class="card" id="cardR">
+        <img id="claude-start" class="clip" src="assets/stills/cl_start.jpg" data-start="0" data-duration="2.6" alt="" />
+        <video id="claude-r1" class="clip" src="media/claude.mp4" muted playsinline data-start="2.6" data-duration="9.95" data-media-start="0"></video>
+        <img id="claude-hold" class="clip" src="assets/stills/cl_hold.jpg" data-start="12.55" data-duration="2.6" alt="" />
+        <video id="claude-r2" class="clip" src="media/claude.mp4" muted playsinline data-start="15.15" data-duration="14.5" data-media-start="13.15"></video>
+        <img id="claude-end" class="clip" src="assets/stills/cl_end.jpg" data-start="29.65" data-duration="3.5" alt="" />
+        <div class="dim" id="dimR"></div>
+      </div>
+
+      <div class="frame" id="frameL"><div class="glowring" id="ringL"></div>
+        <div class="badge" id="badgeL"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>AUDIO</div>
+        <div class="num" id="numL">1</div></div>
+      <div class="frame" id="frameR"><div class="glowring" id="ringR"></div>
+        <div class="badge" id="badgeR"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>AUDIO</div>
+        <div class="num" id="numR">2</div></div>
+
+      <div id="cta">Comentá <em>1</em> o <em>2</em></div>
+      <div id="at">@male.gozalo</div>
+
+      <audio id="mix" class="clip" src="assets/mix.wav" data-start="0" data-duration="33.15" data-has-audio="true"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      gsap.set([".chip", "#labL", "#labR", "#cta", "#at"], { xPercent: -50 });
+
+      // drifting points of light (deterministic, no Math.random)
+      const bg = document.getElementById("bg");
+      for (let i = 0; i < 34; i++) {
+        const h = (k) => { const v = Math.sin((i + 1) * k) * 43758.5453; return v - Math.floor(v); };
+        const d = document.createElement("i"); d.className = "dot";
+        d.style.left = (h(12.9898) * 1080).toFixed(1) + "px"; d.style.top = (h(78.233) * 1920).toFixed(1) + "px";
+        d.style.opacity = (0.15 + 0.45 * h(3.17)).toFixed(2); bg.appendChild(d);
+        tl.to(d, { y: -(140 + h(5.1) * 260), duration: 33.15, ease: "none" }, 0);
+      }
+      tl.to("#bg .g1", { x: 60, y: 40, duration: 33.15, ease: "sine.inOut" }, 0);
+      tl.to("#bg .g2", { x: -70, y: -30, duration: 33.15, ease: "sine.inOut" }, 0);
+
+      // intro
+      tl.from("#kicker", { opacity: 0, y: 18, duration: 0.5, ease: "power3.out" }, 0.1);
+      tl.from("#t1", { opacity: 0, y: 34, duration: 0.6, ease: "power3.out" }, 0.25);
+      tl.from("#t2", { opacity: 0, y: 34, scale: 0.92, duration: 0.65, ease: "back.out(1.6)" }, 0.45);
+      tl.from(["#cardL", "#frameL"], { opacity: 0, y: 70, scale: 0.96, duration: 0.7, ease: "power3.out" }, 0.55);
+      tl.from(["#cardR", "#frameR"], { opacity: 0, y: 70, scale: 0.96, duration: 0.7, ease: "power3.out" }, 0.7);
+      tl.from("#labL", { opacity: 0, scale: 0.6, duration: 0.45, ease: "back.out(2)" }, 0.92);
+      tl.from("#labR", { opacity: 0, scale: 0.6, duration: 0.45, ease: "back.out(2)" }, 1.07);
+
+      // round 1: ChatGPT has the audio
+      tl.fromTo("#chip1", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 2.3);
+      tl.to("#ringL", { opacity: 1, duration: 0.35 }, 2.45);
+      tl.to("#badgeL", { opacity: 1, duration: 0.3 }, 2.5);
+      tl.to("#dimR", { opacity: 0.38, duration: 0.35 }, 2.45);
+      tl.to("#dimR", { opacity: 0.55, duration: 0.4 }, 12.55);            // Claude finished its hook: holds its last frame
+
+      // switch to round 2: Claude has the audio
+      tl.to("#chip1", { opacity: 0, y: -14, duration: 0.3, ease: "power2.in" }, 14.88);
+      tl.fromTo("#chip2", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 15.05);
+      tl.to(["#ringL", "#badgeL"], { opacity: 0, duration: 0.3 }, 14.9);
+      tl.to("#dimL", { opacity: 0.38, duration: 0.35 }, 14.95);
+      tl.to("#dimR", { opacity: 0, duration: 0.35 }, 14.95);
+      tl.to("#ringR", { opacity: 1, duration: 0.35 }, 15.05);
+      tl.to("#badgeR", { opacity: 1, duration: 0.3 }, 15.1);
+
+      // closing: vote
+      tl.to(["#ringR", "#badgeR", "#chip2"], { opacity: 0, duration: 0.3 }, 29.55);
+      tl.to(["#dimL", "#dimR"], { opacity: 0.55, duration: 0.4 }, 29.6);
+      tl.fromTo("#numL", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2.2)" }, 29.95);
+      tl.fromTo("#numR", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2.2)" }, 30.1);
+      tl.fromTo("#cta", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, ease: "back.out(1.8)" }, 30.75);
+      tl.fromTo("#at", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 31.1);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>
